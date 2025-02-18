@@ -147,7 +147,12 @@ func (h *developHandler) WithAttrs(as []slog.Attr) slog.Handler {
 }
 
 func (h *developHandler) withGroupOrAttrs(goa groupOrAttrs) *developHandler {
-	h2 := *h
+	h2 := developHandler{
+		opts: h.opts,
+		goas: h.goas,
+		mu:   sync.Mutex{},
+		out:  h.out,
+	}
 	h2.goas = make([]groupOrAttrs, len(h.goas)+1)
 	copy(h2.goas, h.goas)
 	h2.goas[len(h2.goas)-1] = goa
